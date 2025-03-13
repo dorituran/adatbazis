@@ -1,0 +1,686 @@
+{
+    "metadata": {
+        "kernelspec": {
+            "name": "SQL",
+            "display_name": "SQL",
+            "language": "sql"
+        },
+        "language_info": {
+            "name": "sql",
+            "version": ""
+        }
+    },
+    "nbformat_minor": 2,
+    "nbformat": 4,
+    "cells": [
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT COUNT(*) AS 'Rendelések száma'\n",
+                "FROM Rendeles_tetel"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "c3d3660a-728c-462e-8c71-0b0b39c360d9",
+                "language": "sql"
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(1 row affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.034"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 22,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Rendelések száma"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Rendelések száma": "163179"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Rendelések száma</th></tr>",
+                            "<tr><td>163179</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 22
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT MIN(EGYSEGAR) As 'Legalacsonyabb ár',\n",
+                "MAX(EGYSEGAR) As 'Legmagasabb ár', AVG(EGYSEGAR) As 'Átlagár', \n",
+                "STDEV(EGYSEGAR) As 'Árak szórása', MAX(EGYSEGAR)-MIN(EGYSEGAR) As 'Árak tartománya'\n",
+                "FROM Rendeles_tetel\n",
+                "WHERE EGYSEGAR IS NOT NULL"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "f0426ee3-df95-4725-be35-33e6ba47d6d9",
+                "language": "sql"
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(1 row affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.066"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 8,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Legalacsonyabb ár"
+                                    },
+                                    {
+                                        "name": "Legmagasabb ár"
+                                    },
+                                    {
+                                        "name": "Átlagár"
+                                    },
+                                    {
+                                        "name": "Árak szórása"
+                                    },
+                                    {
+                                        "name": "Árak tartománya"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Legalacsonyabb ár": "0",
+                                    "Legmagasabb ár": "46000",
+                                    "Átlagár": "1871,9701949382306",
+                                    "Árak szórása": "5844,0748813138225",
+                                    "Árak tartománya": "46000"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Legalacsonyabb ár</th><th>Legmagasabb ár</th><th>Átlagár</th><th>Árak szórása</th><th>Árak tartománya</th></tr>",
+                            "<tr><td>0</td><td>46000</td><td>1871,9701949382306</td><td>5844,0748813138225</td><td>46000</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 8
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT Egységár_típusa,\n",
+                "    COUNT(*) as 'Esetek száma'\n",
+                "FROM\n",
+                "    (SELECT \n",
+                "        CASE WHEN EGYSEGAR IS NULL THEN 'Üres'\n",
+                "            ELSE 'Nem üres' \n",
+                "            END AS Egységár_típusa\n",
+                "        FROM Rendeles_tetel) rows\n",
+                "GROUP BY Egységár_típusa"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "18d3288a-a26c-4561-8623-650573dd7d6e",
+                "language": "sql",
+                "tags": [
+                    "hide_input"
+                ]
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(2 rows affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.117"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 17,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Egységár_típusa"
+                                    },
+                                    {
+                                        "name": "Esetek száma"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Egységár_típusa": "Nem üres",
+                                    "Esetek száma": "163026"
+                                },
+                                {
+                                    "Egységár_típusa": "Üres",
+                                    "Esetek száma": "153"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Egységár_típusa</th><th>Esetek száma</th></tr>",
+                            "<tr><td>Nem üres</td><td>163026</td></tr>",
+                            "<tr><td>Üres</td><td>153</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 17
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT MIN(MENNYISEG) As 'Legkisebb rendelés',\n",
+                "MAX(MENNYISEG) As 'Legnagyobb rendelés', AVG(MENNYISEG) As 'Átlagos mennyiség', \n",
+                "STDEV(MENNYISEG) As 'Mennyiségek szórása'\n",
+                "FROM Rendeles_tetel\n",
+                "WHERE MENNYISEG IS NOT NULL"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "446d5da0-b180-42e1-928e-631af1f7a7f2",
+                "language": "sql"
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(1 row affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.066"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 6,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Legkisebb rendelés"
+                                    },
+                                    {
+                                        "name": "Legnagyobb rendelés"
+                                    },
+                                    {
+                                        "name": "Átlagos mennyiség"
+                                    },
+                                    {
+                                        "name": "Mennyiségek szórása"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Legkisebb rendelés": "1",
+                                    "Legnagyobb rendelés": "90",
+                                    "Átlagos mennyiség": "39,2081456559974",
+                                    "Mennyiségek szórása": "28,727141680633416"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Legkisebb rendelés</th><th>Legnagyobb rendelés</th><th>Átlagos mennyiség</th><th>Mennyiségek szórása</th></tr>",
+                            "<tr><td>1</td><td>90</td><td>39,2081456559974</td><td>28,727141680633416</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 6
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT \n",
+                "    MENNYISEG AS 'Rendelt termékek száma', \n",
+                "    COUNT(*) As 'Ekkora rendelések száma'\n",
+                "from Rendeles_tetel\n",
+                "WHERE MENNYISEG IS NOT null\n",
+                "GROUP BY MENNYISEG\n",
+                "ORDER BY MENNYISEG"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "05007002-69ae-4274-b5cc-f69b87009407",
+                "language": "sql",
+                "tags": []
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(18 rows affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.053"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 24,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Rendelt termékek száma"
+                                    },
+                                    {
+                                        "name": "Ekkora rendelések száma"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Rendelt termékek száma": "1",
+                                    "Ekkora rendelések száma": "5935"
+                                },
+                                {
+                                    "Rendelt termékek száma": "2",
+                                    "Ekkora rendelések száma": "3054"
+                                },
+                                {
+                                    "Rendelt termékek száma": "3",
+                                    "Ekkora rendelések száma": "2981"
+                                },
+                                {
+                                    "Rendelt termékek száma": "4",
+                                    "Ekkora rendelések száma": "2966"
+                                },
+                                {
+                                    "Rendelt termékek száma": "5",
+                                    "Ekkora rendelések száma": "3019"
+                                },
+                                {
+                                    "Rendelt termékek száma": "6",
+                                    "Ekkora rendelések száma": "2946"
+                                },
+                                {
+                                    "Rendelt termékek száma": "7",
+                                    "Ekkora rendelések száma": "3079"
+                                },
+                                {
+                                    "Rendelt termékek száma": "8",
+                                    "Ekkora rendelések száma": "3120"
+                                },
+                                {
+                                    "Rendelt termékek száma": "9",
+                                    "Ekkora rendelések száma": "3068"
+                                },
+                                {
+                                    "Rendelt termékek száma": "10",
+                                    "Ekkora rendelések száma": "13207"
+                                },
+                                {
+                                    "Rendelt termékek száma": "20",
+                                    "Ekkora rendelések száma": "26393"
+                                },
+                                {
+                                    "Rendelt termékek száma": "30",
+                                    "Ekkora rendelések száma": "13389"
+                                },
+                                {
+                                    "Rendelt termékek száma": "40",
+                                    "Ekkora rendelések száma": "13290"
+                                },
+                                {
+                                    "Rendelt termékek száma": "50",
+                                    "Ekkora rendelések száma": "13398"
+                                },
+                                {
+                                    "Rendelt termékek száma": "60",
+                                    "Ekkora rendelések száma": "13540"
+                                },
+                                {
+                                    "Rendelt termékek száma": "70",
+                                    "Ekkora rendelések száma": "13339"
+                                },
+                                {
+                                    "Rendelt termékek száma": "80",
+                                    "Ekkora rendelések száma": "13198"
+                                },
+                                {
+                                    "Rendelt termékek száma": "90",
+                                    "Ekkora rendelések száma": "13257"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Rendelt termékek száma</th><th>Ekkora rendelések száma</th></tr>",
+                            "<tr><td>1</td><td>5935</td></tr>",
+                            "<tr><td>2</td><td>3054</td></tr>",
+                            "<tr><td>3</td><td>2981</td></tr>",
+                            "<tr><td>4</td><td>2966</td></tr>",
+                            "<tr><td>5</td><td>3019</td></tr>",
+                            "<tr><td>6</td><td>2946</td></tr>",
+                            "<tr><td>7</td><td>3079</td></tr>",
+                            "<tr><td>8</td><td>3120</td></tr>",
+                            "<tr><td>9</td><td>3068</td></tr>",
+                            "<tr><td>10</td><td>13207</td></tr>",
+                            "<tr><td>20</td><td>26393</td></tr>",
+                            "<tr><td>30</td><td>13389</td></tr>",
+                            "<tr><td>40</td><td>13290</td></tr>",
+                            "<tr><td>50</td><td>13398</td></tr>",
+                            "<tr><td>60</td><td>13540</td></tr>",
+                            "<tr><td>70</td><td>13339</td></tr>",
+                            "<tr><td>80</td><td>13198</td></tr>",
+                            "<tr><td>90</td><td>13257</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 24
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT TOP 10 TERMEKKOD AS '10 leggyakrabban rendelt termék kódja', COUNT(*) AS 'Rendelt darabok száma'\n",
+                "FROM Rendeles_tetel\n",
+                "WHERE TERMEKKOD IS NOT NULL\n",
+                "GROUP BY TERMEKKOD\n",
+                "ORDER BY COUNT(*) DESC"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "e11846ae-bd60-4fd9-a452-276a88a67bd4",
+                "language": "sql"
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(10 rows affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.102"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 11,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "10 leggyakrabban rendelt termék kódja"
+                                    },
+                                    {
+                                        "name": "Rendelt darabok száma"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "L023-FE301",
+                                    "Rendelt darabok száma": "994"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "G013-NA201",
+                                    "Rendelt darabok száma": "991"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "G029-FE307",
+                                    "Rendelt darabok száma": "985"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "N039-AL222",
+                                    "Rendelt darabok száma": "974"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "G073-CI410",
+                                    "Rendelt darabok száma": "967"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "N019-FE301",
+                                    "Rendelt darabok száma": "966"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "N029-AL212",
+                                    "Rendelt darabok száma": "966"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "G048-PO218",
+                                    "Rendelt darabok száma": "957"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "G038-FE316",
+                                    "Rendelt darabok száma": "957"
+                                },
+                                {
+                                    "10 leggyakrabban rendelt termék kódja": "F007-NA201",
+                                    "Rendelt darabok száma": "955"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>10 leggyakrabban rendelt termék kódja</th><th>Rendelt darabok száma</th></tr>",
+                            "<tr><td>L023-FE301</td><td>994</td></tr>",
+                            "<tr><td>G013-NA201</td><td>991</td></tr>",
+                            "<tr><td>G029-FE307</td><td>985</td></tr>",
+                            "<tr><td>N039-AL222</td><td>974</td></tr>",
+                            "<tr><td>G073-CI410</td><td>967</td></tr>",
+                            "<tr><td>N019-FE301</td><td>966</td></tr>",
+                            "<tr><td>N029-AL212</td><td>966</td></tr>",
+                            "<tr><td>G048-PO218</td><td>957</td></tr>",
+                            "<tr><td>G038-FE316</td><td>957</td></tr>",
+                            "<tr><td>F007-NA201</td><td>955</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 11
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT MIN(LEN(TERMEKKOD)) AS 'Legrövidebb termékkód hossza', \n",
+                "       MAX(LEN(TERMEKKOD)) AS 'Leghosszabb termékkód hossza', \n",
+                "       AVG(LEN(TERMEKKOD)) AS 'Termékkódok átlagos hossza', \n",
+                "       STDEV(LEN(TERMEKKOD)) AS 'Termékkódok hosszának szórása'\n",
+                "FROM Rendeles_tetel\n",
+                "WHERE TERMEKKOD IS NOT NULL\n",
+                "AND LEN(TERMEKKOD) > 0"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "7a214911-2bcc-4ff7-9b01-c6bfa8adc524",
+                "language": "sql"
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(1 row affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.076"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 21,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Legrövidebb termékkód hossza"
+                                    },
+                                    {
+                                        "name": "Leghosszabb termékkód hossza"
+                                    },
+                                    {
+                                        "name": "Termékkódok átlagos hossza"
+                                    },
+                                    {
+                                        "name": "Termékkódok hosszának szórása"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Legrövidebb termékkód hossza": "9",
+                                    "Leghosszabb termékkód hossza": "10",
+                                    "Termékkódok átlagos hossza": "9",
+                                    "Termékkódok hosszának szórása": "0,3892250514249414"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Legrövidebb termékkód hossza</th><th>Leghosszabb termékkód hossza</th><th>Termékkódok átlagos hossza</th><th>Termékkódok hosszának szórása</th></tr>",
+                            "<tr><td>9</td><td>10</td><td>9</td><td>0,3892250514249414</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 21
+        },
+        {
+            "cell_type": "code",
+            "source": [
+                "SELECT LEN(TERMEKKOD) AS 'Termékkód hossza (karakter)',\n",
+                "       count(*) AS 'Darab'\n",
+                "FROM Rendeles_tetel\n",
+                "GROUP BY LEN(TERMEKKOD)\n",
+                "ORDER BY 1"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "c8d52ff0-12f7-405e-bcbe-733f73840ef8",
+                "language": "sql"
+            },
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "(2 rows affected)"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/html": "Total execution time: 00:00:00.060"
+                    },
+                    "metadata": {}
+                },
+                {
+                    "output_type": "execute_result",
+                    "metadata": {},
+                    "execution_count": 19,
+                    "data": {
+                        "application/vnd.dataresource+json": {
+                            "schema": {
+                                "fields": [
+                                    {
+                                        "name": "Termékkód hossza (karakter)"
+                                    },
+                                    {
+                                        "name": "Darab"
+                                    }
+                                ]
+                            },
+                            "data": [
+                                {
+                                    "Termékkód hossza (karakter)": "9",
+                                    "Darab": "132804"
+                                },
+                                {
+                                    "Termékkód hossza (karakter)": "10",
+                                    "Darab": "30375"
+                                }
+                            ]
+                        },
+                        "text/html": [
+                            "<table>",
+                            "<tr><th>Termékkód hossza (karakter)</th><th>Darab</th></tr>",
+                            "<tr><td>9</td><td>132804</td></tr>",
+                            "<tr><td>10</td><td>30375</td></tr>",
+                            "</table>"
+                        ]
+                    }
+                }
+            ],
+            "execution_count": 19
+        }
+    ]
+}
