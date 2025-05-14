@@ -180,5 +180,62 @@ db.receptek.updateOne(
   { $push: { likes: 200 } }
 )
 ```
+16. mintazh kérdések és válaszok
+műfaj első short, az év 1945 és 1970 között, csak a cím és az év jelenjen meg, sorbarendezés év azon belül cím szerint (növekvő mind2)
+```js
+db.movies.find({
+    "genres.0": "Short",
+    "year": { "$gte": 1945, "$lte": 1970 }
+}, {
+    "_id": 0,
+    "title": 1,
+    "year": 1
+}).sort({
+    "year": 1,
+    "title": 1
+})
+```
+megfelel annak hogy:
+select year, avg(nem_mflix_comments)
+from movies
+where runtime between 50 and 100
+group by year
+
+```js
+db.movies.aggregate([
+    {
+        $match: {
+            runtime: { $gte: 50, $lte: 100 }
+        }
+    },
+    {
+        $group: {
+            _id: "$year",
+            avg_comments: { $avg: "$num_mflix_comments" }
+        }
+    },
+    {
+        $project: {
+            year: "$_id",
+            avg_num_mflix_comments: "$avg_comments",
+            _id: 0
+        }
+    },
+    {
+        $sort: {
+            year: 1
+        }
+    }
+])
+```
+Neo4j: filmek címe és szereplői, csak a cím és a szereplő neve jelenjen meg, 1970 utáni évek VAGY Love szó szerepel benne, el kell nevezni a megjelenített mezőket, sorbarendezés cím szerint csökkenő
+
+```js
+MATCH (m:Movie)<-[r:ACTED_IN]-(p:Person)
+WHERE m.released > 1970 OR m.title CONTAINS 'Love' --lehet hogy released helyett yearnek hivják a mezőt
+RETURN p.name AS SzereploNeve, m.title AS FilmCime
+ORDER BY FilmCime DESC
+```
+
 
 OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldható
