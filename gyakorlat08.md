@@ -18,14 +18,27 @@ A megoldásokat - ahol kódot kell írni - másoljuk be a ```js és a ``` közö
 a Készítsen lekérdezést, amely csak az user_id, firstName és lastname oszlopokat jeleníti meg!
 
 ```js
-
+db.collection.find({},
+{
+  _id: 0,
+  user_id: 1,
+  firstName: 1,
+  lastname: 1
+})
 ```
 
 
 2.	A MongoPlayground-on az előző feladatban létrehozott gyűjteményből kérdezze le a Grace keresztnevű felhasználó email-címét és jelszavát (csak ez a két mező jelenjen meg)!
 
 ```js
-
+db.collection.find({
+  firstName: "Grace"
+},
+{
+  _id: 0,
+  email: 1,
+  password: 1
+})
 ```
 
 
@@ -43,7 +56,7 @@ a. A listában csak azok a dokumentumok jelenjenek meg, ahol a tanuló azonosít
 
    
 ```js
-
+{ "student_id": { "$gte": 0, "$lte": 200 }, "class_id": { "$lt": 500 } }
 ```
 
 OPCIONÁLISAN: a feladat a MongoDB Compass-ban, a VS Code-ban vagy a MongoDB Shell-ben is megoldható
@@ -85,7 +98,7 @@ OPCIONÁLISAN: a feladat a VS Code-ban vagy a MongoDB Shell-ben is megoldható
 8. Az előző feladatban létrehozott lekérdezésre hajtsa végre az Explain Plan funkciót!
 
 ```js
-
+b.receptek.find({"likes_count": {$gt: 2}}).sort({"cook_time": -1}).explain()
 ```
 
 OPCIONÁLISAN: a feladat a VS Code-ban vagy a MongoDB Shell-ben is megoldható
@@ -103,7 +116,8 @@ a. Adjuk ki a show dbs parancsot!
 b. Csatlakozzunk a gyak_compass adatbázishoz!
 
 ```js
-
+show dbs
+use gyak_compass
 ```
 
 11. A mongo shellben kérdezzük le, hogy a receptek gyűjteményben mely dokumentumoknál szerepel a recept nevében (title) a Tacos szó!
@@ -119,7 +133,14 @@ OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldhat�
 12. A mongo shell-ben kérdezzük le, hogy recept  típusonként (type) mennyi a főzési idők (cook_time) összege!
 
 ```js
-
+db.receptek.aggregate([
+  {
+    $group: {
+      _id: "$type",
+      total_cook_time: { $sum: "$cook_time" }
+    }
+  }
+])
 ```
 OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldható
 
@@ -131,7 +152,10 @@ b. A tag-ek között szerepel a "quick" vagy az "easy" (legalább az egyik)
 
 
 ```js
-
+db.receptek.find({
+  servings: 4,
+  tags: { $in: ["quick", "easy"] }
+}).count()
 ```
 
 OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldható
@@ -139,7 +163,10 @@ OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldhat�
 14. A mongo shell-ben a receptek gyűjteményben a ObjectId("5e878f5220a4f574c0aa56db") azonosítójú dokumentum esetén módosítsuk a főzési időt (cook_time) 33 percre!
 
 ```js
-
+db.receptek.updateOne(
+  { _id: ObjectId("5e878f5220a4f574c0aa56db") },
+  { $set: { cook_time: 33 } }
+)
 ```
 
 OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldható
@@ -148,7 +175,10 @@ OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldhat�
 
 
 ```js
-
+db.receptek.updateOne(
+  { _id: ObjectId("5e5e9c470d33e9e8e3891b35") },
+  { $push: { likes: 200 } }
+)
 ```
 
 OPCIONÁLISAN: a feladat a MongoDB Compass-ban, vagy a VS Code-ban is megoldható
